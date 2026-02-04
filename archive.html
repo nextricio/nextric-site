@@ -1,0 +1,44 @@
+---
+layout: default
+title: Archive
+permalink: /archive/
+---
+
+<div class="page-header">
+  <div class="container">
+    <h1>All Articles</h1>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="container">
+    {% if site.posts.size > 0 %}
+    <div class="archive-list">
+      {% for post in site.posts %}
+      <article class="archive-item">
+        <time class="archive-date" datetime="{{ post.date | date_to_xmlschema }}">
+          {{ post.date | date: "%B %d, %Y" }}
+        </time>
+        <h3 class="archive-title">
+          <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </h3>
+        {% if post.excerpt %}
+        <p class="archive-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+        {% endif %}
+        {% if post.tags.size > 0 %}
+        <div class="archive-tags">
+          {% for tag in post.tags %}
+          <span class="tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-posts">
+      <p>No articles published yet. Check back soon!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,141 @@
+.site-header {
+  border-bottom: 1px solid #e8e8e8;
+  min-height: 56px;
+  padding: 20px 0;
+  background: #fff;
+}
+
+.site-title {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 56px;
+  letter-spacing: -1px;
+  margin-bottom: 0;
+  float: left;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.site-nav {
+  float: right;
+  line-height: 56px;
+}
+
+.site-nav a {
+  margin-left: 20px;
+  color: #666;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
+  color: #2c3e50;
+}
+
+.page-content {
+  padding: 30px 0;
+  flex: 1;
+}
+
+.wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  margin-bottom: 40px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30px;
+}
+
+.post-meta {
+  font-size: 14px;
+  color: #828282;
+}
+
+.post-link {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.post-link:hover {
+  color: #3498db;
+}
+
+.post-header {
+  margin-bottom: 30px;
+}
+
+.post-title {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  color: #2c3e50;
+}
+
+.post-content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.post-content h2 {
+  font-size: 32px;
+  margin-top: 40px;
+  color: #2c3e50;
+}
+
+.post-content h3 {
+  font-size: 26px;
+  margin-top: 30px;
+  color: #2c3e50;
+}
+
+.post-tags {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.tag {
+  background: #f1f3f4;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 8px;
+  color: #666;
+}
+
+.site-footer {
+  border-top: 1px solid #e8e8e8;
+  padding: 30px 0;
+  text-align: center;
+  color: #828282;
+  font-size: 14px;
+}
+
+.intro {
+  font-size: 20px;
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background: #fff;
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}

@@ -1,0 +1,69 @@
+---
+layout: default
+title: Home
+---
+
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-title">AI-Powered Passive Income</h1>
+    <p class="hero-subtitle">Discover strategies, tools, and insights to build sustainable revenue streams with artificial intelligence.</p>
+    <div class="hero-cta">
+      <a href="#latest-articles" class="btn btn-primary">Read Latest Articles</a>
+      <a href="{{ '/about' | relative_url }}" class="btn btn-secondary">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<section id="latest-articles" class="articles-section">
+  <div class="container">
+    <h2 class="section-title">Latest Articles</h2>
+    
+    {% if site.posts.size > 0 %}
+    <div class="articles-grid">
+      {% for post in site.posts limit:6 %}
+      <article class="article-card">
+        <a href="{{ post.url | relative_url }}" class="card-link">
+          <header class="card-header">
+            <time class="card-date" datetime="{{ post.date | date_to_xmlschema }}">
+              {{ post.date | date: "%b %d, %Y" }}
+            </time>
+            {% if post.tags.size > 0 %}
+            <span class="card-tag">{{ post.tags[0] }}</span>
+            {% endif %}
+          </header>
+          <h3 class="card-title">{{ post.title | escape }}</h3>
+          {% if post.excerpt %}
+          <p class="card-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+          {% endif %}
+          <span class="card-read-more">Read article →</span>
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+    
+    {% if site.posts.size > 6 %}
+    <div class="view-all">
+      <a href="{{ '/archive' | relative_url }}" class="btn btn-outline">View All Articles</a>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="no-posts">
+      <p>No articles yet. Check back soon for fresh content!</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-content">
+      <h2>Stay Updated</h2>
+      <p>Get the latest AI passive income strategies delivered to your inbox.</p>
+      <form class="newsletter-form" action="https://buttondown.email/api/emails/embed-subscribe/nextric" method="post" target="_blank">
+        <input type="email" name="email" placeholder="Enter your email" required aria-label="Email address">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>

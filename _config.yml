@@ -1,0 +1,88 @@
+# Site settings
+title: Nextric
+email: dev@nextric.io
+description: >-
+  AI-powered passive income strategies and insights.
+  Learn how to build sustainable revenue streams with cutting-edge AI tools.
+baseurl: ""
+url: "https://nextric.io"
+twitter_username: nextricio
+github_username: nextricio
+author: Nextric Team
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+# Pagination
+paginate: 5
+paginate_path: "/page/:num/"
+
+# SEO defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Nextric Team"
+      image: "/assets/images/default-og.jpg"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:categories/:year/:month/:day/:title/
+
+# Exclude from processing
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - scripts/
+  - README.md
+  - DEPLOYMENT.md
+  - ".github/"
+
+# Keep files
+keep_files:
+  - ".git"
+  - ".gitignore"
+  - CNAME
+
+# Sass settings
+sass:
+  style: compressed
+
+# Timezone
+timezone: America/New_York
+
+# Future posts
+future: false
+
+# Show drafts locally
+show_drafts: false
+
+# Google Analytics (add your tracking ID when available)
+# google_analytics: G-XXXXXXXXXX
+
+# Disqus (add your shortname when available)
+# disqus:
+#   shortname: nextric

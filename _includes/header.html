@@ -1,0 +1,21 @@
+<header class="site-header" role="banner">
+  <div class="container">
+    <a class="site-logo" href="{{ '/' | relative_url }}" aria-label="Nextric Home">
+      <svg viewBox="0 0 140 32" width="140" height="32" aria-hidden="true">
+        <text x="0" y="24" fill="currentColor" font-family="JetBrains Mono, monospace" font-size="24" font-weight="600">nextric</text>
+      </svg>
+    </a>
+    
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      
+      <ul id="nav-menu" class="nav-menu">
+        <li><a href="{{ '/' | relative_url }}" class="{% if page.url == '/' %}active{% endif %}">Home</a></li>
+        <li><a href="{{ '/about' | relative_url }}" class="{% if page.url == '/about/' %}active{% endif %}">About</a></li>
+        <li><a href="{{ '/feed.xml' | relative_url }}" class="nav-rss">RSS</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
