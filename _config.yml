@@ -80,8 +80,8 @@ future: false
 # Show drafts locally
 show_drafts: false
 
-# Google Analytics (add your tracking ID when available)
-# google_analytics: G-XXXXXXXXXX
+# Google Analytics
+google_analytics: G-DBW9Q96W0F
 
 # Disqus (add your shortname when available)
 # disqus:
