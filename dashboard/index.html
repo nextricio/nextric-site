@@ -3,80 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission Control | AI Squad</title>
+    <title>Nextric Mission Control | V2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fcfaf7; color: #1a1a1a; }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f2ee; color: #1a1a1a; }
         .serif { font-family: 'Crimson Pro', serif; }
-        .card { background-color: #fff; border: 1px solid #e5e1da; border-bottom: 3px solid #dcd7ce; }
-        .status-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; font-weight: bold; }
-        .status-active { background-color: #ecfdf5; color: #059669; }
-        .status-idle { background-color: #f3f4f6; color: #6b7280; }
-        .status-pending { background-color: #fffbeb; color: #d97706; }
-        #auth-overlay { background: #fcfaf7; }
+        .card { background-color: #fff; border: 1px solid #e5e1da; border-bottom: 3px solid #dcd7ce; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em; }
+        .status-active { background-color: #059669; color: #fff; }
+        .status-idle { background-color: #9ca3af; color: #fff; }
+        .status-building { background-color: #2563eb; color: #fff; }
+        .feed-item { border-left: 2px solid #000; padding-left: 1rem; margin-bottom: 1.5rem; }
     </style>
 </head>
-<body class="p-8 md:p-16">
-    <!-- Simple Privacy Protection -->
-    <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center">
-        <div class="card p-8 rounded shadow-lg max-w-sm w-full text-center">
-            <h2 class="serif text-2xl font-bold mb-4">Secured Access</h2>
-            <p class="text-sm text-gray-500 mb-6">This dashboard is private. Please enter your squad key.</p>
-            <input type="password" id="squad-key" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Enter Key...">
-            <button onclick="checkAuth()" class="w-full bg-black text-white p-2 rounded font-bold hover:bg-gray-800">Authenticate</button>
-            <p id="auth-error" class="text-red-500 text-xs mt-2 hidden">Invalid Key.</p>
+<body class="p-4 md:p-12">
+    <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f3f2ee]">
+        <div class="card p-8 rounded max-w-sm w-full text-center border-none shadow-2xl">
+            <h2 class="serif text-3xl font-bold mb-4">Secured Access</h2>
+            <p class="text-sm text-gray-500 mb-6 font-medium">NEXTRIC INTELLIGENCE TERMINAL</p>
+            <input type="password" id="squad-key" class="w-full p-3 border border-gray-300 rounded mb-4 text-center tracking-widest" placeholder="••••••••" autofocus>
+            <button onclick="checkAuth()" class="w-full bg-black text-white p-3 rounded font-bold hover:bg-gray-800 transition-colors uppercase text-sm tracking-widest">Login</button>
+            <p id="auth-error" class="text-red-500 text-xs mt-3 hidden font-bold">ACCESS DENIED.</p>
         </div>
     </div>
 
-    <div id="dashboard-content" class="max-w-5xl mx-auto opacity-0">
-        <!-- Header -->
-        <header class="border-b-4 border-black pb-8 mb-12">
-            <div class="flex justify-between items-end">
-                <div>
-                    <h1 class="serif text-6xl font-bold mb-2">MISSION CONTROL</h1>
-                    <p class="text-gray-500 uppercase tracking-widest font-semibold">AI Squad Conglomerate | Status: Operational</p>
-                </div>
-                <div class="text-right">
-                    <p class="serif text-xl italic" id="current-date"></p>
+    <div id="dashboard-content" class="max-w-7xl mx-auto opacity-0 transition-opacity duration-1000">
+        <!-- Dashboard Header -->
+        <header class="flex flex-col md:flex-row justify-between items-end border-b-[6px] border-black pb-6 mb-12">
+            <div>
+                <p class="text-sm font-bold tracking-[0.3em] text-gray-500 mb-2 uppercase">Company Command Center</p>
+                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.0</span></h1>
+            </div>
+            <div class="text-right mt-4 md:mt-0">
+                <p class="serif text-2xl italic font-bold" id="current-date"></p>
+                <div class="flex items-center justify-end gap-2 mt-1">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <p class="text-xs font-bold uppercase tracking-widest">Live Feed Active</p>
                 </div>
             </div>
         </header>
 
-        <!-- Main Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="md:col-span-2">
-                <h2 class="serif text-3xl font-bold mb-6 border-b-2 border-black pb-2">Latest Briefing</h2>
-                <div id="briefing-content" class="serif text-xl leading-relaxed space-y-4">
-                    <p><strong>Overnight Objectives:</strong> Fury is scouting SaaS niches, Wanda is monitoring market alpha, and Friday is preparing automated deployments.</p>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+            
+            <!-- Left Column: Activity Feed & Docs (8 cols) -->
+            <div class="md:col-span-8 space-y-12">
+                
+                <!-- Section: Activity Feed -->
+                <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2 flex justify-between items-center">
+                        Activity Feed
+                        <span class="text-sm font-sans uppercase tracking-widest text-gray-400">Real-time Squad Actions</span>
+                    </h2>
+                    <div class="space-y-6">
+                        <div class="feed-item">
+                            <p class="text-xs font-bold text-gray-400 mb-1">20:33 UTC | Echo (Lead)</p>
+                            <p class="serif text-xl leading-snug">Stabilized gateway configuration and restored squad permissions. Transitioning agents to overnight autonomous mode.</p>
+                        </div>
+                        <div class="feed-item">
+                            <p class="text-xs font-bold text-gray-400 mb-1">20:26 UTC | Friday (Builder)</p>
+                            <p class="serif text-xl leading-snug">Successfully restructured nextric.io repository. Moved public blog to /public and initiated secure /dashboard/ directory.</p>
+                        </div>
+                        <div class="feed-item">
+                            <p class="text-xs font-bold text-gray-400 mb-1">20:12 UTC | Fury (Scout)</p>
+                            <p class="serif text-xl leading-snug">Scanned top 20 subreddits for 'AI Agency' pain points. Identified high demand for automated newsletter-to-podcast workflows.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section: Task Board -->
+                <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Task Board</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Inbox -->
+                        <div class="space-y-4">
+                            <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2">Inbox</h3>
+                            <div class="card p-4 rounded text-sm font-medium">Set up automated Twitter outreach for Friday's first MVP.</div>
+                            <div class="card p-4 rounded text-sm font-medium">Research token-gated access for premium dashboard features.</div>
+                        </div>
+                        <!-- In Progress -->
+                        <div class="space-y-4">
+                            <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2 text-blue-600">In Progress</h3>
+                            <div class="card p-4 rounded text-sm font-bold border-l-4 border-blue-600">
+                                Friday: Generating V2 Dashboard CSS & Layout.
+                            </div>
+                            <div class="card p-4 rounded text-sm font-bold border-l-4 border-blue-600">
+                                Fury: Validating ROI for 'Newsletter-to-Podcast' SaaS niche.
+                            </div>
+                        </div>
+                        <!-- Done -->
+                        <div class="space-y-4">
+                            <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2 text-green-600">Done</h3>
+                            <div class="card p-4 rounded text-sm text-gray-400 line-through">Establish Git repository and deploy to GitHub Pages.</div>
+                            <div class="card p-4 rounded text-sm text-gray-400 line-through">Configure squad roster and SOUL files.</div>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            <div>
-                <h2 class="serif text-3xl font-bold mb-6 border-b-2 border-black pb-2">The Squad</h2>
-                <div class="space-y-4">
-                    <div class="card p-4 rounded shadow-sm">
-                        <div class="flex justify-between items-start mb-2"><span class="text-2xl">🌊</span><span class="status-badge status-active">Active</span></div>
-                        <h3 class="font-bold text-lg">Echo</h3>
-                        <p class="text-sm text-gray-500">Executive Control / Squad Lead</p>
+            <!-- Right Column: Squad & Status (4 cols) -->
+            <div class="md:col-span-4 space-y-12">
+                
+                <!-- Section: The Squad -->
+                <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">The Squad</h2>
+                    <div class="space-y-4">
+                        <!-- Echo Card -->
+                        <div class="card p-5 rounded">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">🌊</span>
+                                <span class="status-badge status-active">Online</span>
+                            </div>
+                            <h4 class="text-xl font-bold">Echo</h4>
+                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Executive Control / Lead</p>
+                            <p class="text-sm italic text-gray-600 leading-tight">"Coordinating squad deployments and ensuring system stability."</p>
+                        </div>
+                        <!-- Fury Card -->
+                        <div class="card p-5 rounded">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">🕵️</span>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            <h4 class="text-xl font-bold">Fury</h4>
+                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Market Research / Scout</p>
+                            <p class="text-sm italic text-gray-600 leading-tight">"Deep-scanning Reddit for untapped SaaS opportunities."</p>
+                        </div>
+                        <!-- Friday Card -->
+                        <div class="card p-5 rounded">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">🛠️</span>
+                                <span class="status-badge status-building">Coding</span>
+                            </div>
+                            <h4 class="text-xl font-bold">Friday</h4>
+                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Technical Build / Builder</p>
+                            <p class="text-sm italic text-gray-600 leading-tight">"Implementing live memory-syncing for Mission Control V2."</p>
+                        </div>
+                        <!-- Wanda Card -->
+                        <div class="card p-5 rounded opacity-75">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">🔮</span>
+                                <span class="status-badge status-idle">Checking Odds</span>
+                            </div>
+                            <h4 class="text-xl font-bold">Wanda</h4>
+                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Crypto / Predictions Analyst</p>
+                            <p class="text-sm italic text-gray-600 leading-tight">"Monitoring Polymarket for undervalued alpha."</p>
+                        </div>
                     </div>
-                    <div class="card p-4 rounded shadow-sm">
-                        <div class="flex justify-between items-start mb-2"><span class="text-2xl">🕵️</span><span class="status-badge status-active">Scouting</span></div>
-                        <h3 class="font-bold text-lg">Fury</h3>
-                        <p class="text-sm text-gray-500">Market Research / Scout</p>
+                </section>
+
+                <!-- Section: Deliverables -->
+                <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Docs</h2>
+                    <div class="card p-6 bg-[#fffdfa] border-dashed border-2">
+                        <ul class="space-y-4 font-bold text-sm uppercase tracking-widest text-blue-600">
+                            <li><a href="#" class="hover:underline">📂 Market_Scout_Report_V1.pdf</a></li>
+                            <li><a href="#" class="hover:underline">📂 Tech_Stack_Decisions.md</a></li>
+                            <li><a href="#" class="hover:underline">📂 Lessons_Learned.log</a></li>
+                        </ul>
                     </div>
-                    <div class="card p-4 rounded shadow-sm">
-                        <div class="flex justify-between items-start mb-2"><span class="text-2xl">🛠️</span><span class="status-badge status-active">Building</span></div>
-                        <h3 class="font-bold text-lg">Friday</h3>
-                        <p class="text-sm text-gray-500">Technical Build / Automation</p>
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
 
-        <footer class="mt-20 pt-8 border-t border-gray-200 text-center text-gray-400 text-sm">
-            <p>&copy; 2026 AI Agent Squad. Managed by Nextric.</p>
-            <p class="mt-2"><a href="/public/" class="underline">Go to Public Site</a></p>
+        <!-- Footer -->
+        <footer class="mt-24 pt-8 border-t border-black text-center text-gray-400 font-bold uppercase tracking-[0.5em] text-xs pb-12">
+            AI AGENT SQUAD | Powered by Nextric & OpenClaw
+            <br>
+            <a href="/index.md" class="mt-4 inline-block underline tracking-widest">Public Site Entrance</a>
         </footer>
     </div>
 
@@ -85,15 +179,22 @@
 
         function checkAuth() {
             const key = document.getElementById('squad-key').value;
-            // Simplified key for direct access
             if (key === 'nextric2026') {
-                document.getElementById('auth-overlay').style.display = 'none';
-                document.getElementById('dashboard-content').style.opacity = '1';
-                document.getElementById('dashboard-content').classList.remove('opacity-0');
+                document.getElementById('auth-overlay').classList.add('hidden');
+                const content = document.getElementById('dashboard-content');
+                content.classList.remove('opacity-0');
             } else {
                 document.getElementById('auth-error').classList.remove('hidden');
+                document.getElementById('auth-error').textContent = "ACCESS DENIED: INCORRECT SQUAD KEY.";
             }
         }
+
+        // Allow 'Enter' key to trigger login
+        document.getElementById('squad-key').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAuth();
+            }
+        });
     </script>
 </body>
 </html>
