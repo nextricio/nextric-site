@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-browser": {
+      "version": "0.2.0",
+      "installedAt": 1770318312912
+    },
+    "self-improving-agent": {
+      "version": "1.0.5",
+      "installedAt": 1770318342557
+    },
+    "github": {
+      "version": "1.0.0",
+      "installedAt": 1770318773644
+    },
+    "prompt-engineering-expert": {
+      "version": "1.0.0",
+      "installedAt": 1770318775655
+    },
+    "agentmail": {
+      "version": "1.1.1",
+      "installedAt": 1770318777244
+    },
+    "hyperliquid-trading": {
+      "version": "1.0.0",
+      "installedAt": 1770318987934
+    },
+    "polymarket-odds": {
+      "version": "1.0.0",
+      "installedAt": 1770318990027
+    },
+    "crypto-price": {
+      "version": "0.2.2",
+      "installedAt": 1770318992317
+    },
+    "financial-market-analysis": {
+      "version": "1.0.0",
+      "installedAt": 1770318994029
+    },
+    "weather": {
+      "version": "1.0.0",
+      "installedAt": 1770318995368
+    }
+  }
+}
