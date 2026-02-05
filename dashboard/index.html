@@ -177,12 +177,25 @@
     <script>
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+        // Auto-login if key is stored
+        window.addEventListener('load', () => {
+            const storedKey = localStorage.getItem('squad_auth_key');
+            if (storedKey === 'ghp_WnjF') {
+                showDashboard();
+            }
+        });
+
+        function showDashboard() {
+            document.getElementById('auth-overlay').classList.add('hidden');
+            const content = document.getElementById('dashboard-content');
+            content.classList.remove('opacity-0');
+        }
+
         function checkAuth() {
             const key = document.getElementById('squad-key').value;
             if (key === 'ghp_WnjF') {
-                document.getElementById('auth-overlay').classList.add('hidden');
-                const content = document.getElementById('dashboard-content');
-                content.classList.remove('opacity-0');
+                localStorage.setItem('squad_auth_key', key);
+                showDashboard();
             } else {
                 document.getElementById('auth-error').classList.remove('hidden');
                 document.getElementById('auth-error').textContent = "ACCESS DENIED: INCORRECT SQUAD KEY.";
