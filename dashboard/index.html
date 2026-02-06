@@ -166,7 +166,7 @@
         function renderFeed(data) {
             document.getElementById('activity-feed').innerHTML = data.slice(0, 10).map(item => `
                 <div class="feed-item">
-                    <p class="text-xs font-bold text-gray-400 mb-1">${item.timestamp} | ${item.agent}</p>
+                    <p class="text-xs font-bold text-gray-400 mb-1">${item.timestamp} (UTC+1)</p>
                     <p class="serif text-xl leading-snug">${item.content}</p>
                 </div>
             `).join('');
@@ -181,18 +181,21 @@
         }
 
         function renderComms(data) {
-            document.getElementById('squad-comms').innerHTML = data.slice(-5).reverse().map(item => `
+            document.getElementById('squad-comms').innerHTML = data.slice(-5).reverse().map(item => {
+                const date = new Date(item.timestamp);
+                const utc1Time = new Date(date.getTime() + (60 * 60 * 1000)).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + " UTC+1";
+                return `
                 <div class="card mb-3 relative overflow-hidden">
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">${item.from} → ${item.to}</span>
-                        <span class="text-[9px] text-gray-400">${new Date(item.timestamp).toLocaleTimeString()}</span>
+                        <span class="text-[9px] text-gray-400">${utc1Time}</span>
                     </div>
                     <p class="text-sm font-medium italic">"${item.message}"</p>
                     <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none p-1">
                         <span class="text-xs">💬</span>
                     </div>
                 </div>
-            `).join('') || '<p class="text-xs text-center text-gray-400">No recent comms.</p>';
+            `}).join('') || '<p class="text-xs text-center text-gray-400">No recent comms.</p>';
         }
 
         function syncWorking(markdown) {

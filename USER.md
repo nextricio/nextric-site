@@ -3,5 +3,5 @@
 - **Name:** William
 - **What to call them:** William
 - **Pronouns:** 
-- **Timezone:** UTC (Default)
+- **Timezone:** UTC+1 (Central European Time)
 - **Notes:** 
