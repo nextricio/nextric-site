@@ -1,0 +1,3 @@
+py-polymarket
+hyperliquid-python-sdk
+python-dotenv

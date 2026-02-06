@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nextric Mission Control | V2</title>
+    <title>Nextric Mission Control | V2.2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f2ee; color: #1a1a1a; }
         .serif { font-family: 'Crimson Pro', serif; }
-        .card { background-color: #fff; border: 1px solid #e5e1da; border-bottom: 3px solid #dcd7ce; transition: transform 0.2s; }
+        .card { background-color: #fff; border: 1px solid #e5e1da; border-bottom: 3px solid #dcd7ce; transition: transform 0.2s; padding: 1rem; border-radius: 0.25rem; }
         .card:hover { transform: translateY(-2px); }
         .status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em; }
         .status-active { background-color: #059669; color: #fff; }
         .status-idle { background-color: #9ca3af; color: #fff; }
-        .status-building { background-color: #2563eb; color: #fff; }
         .feed-item { border-left: 2px solid #000; padding-left: 1rem; margin-bottom: 1.5rem; }
+        .pulse-active { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
     </style>
 </head>
 <body class="p-4 md:p-12">
+    <!-- Auth Overlay -->
     <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f3f2ee]">
         <div class="card p-8 rounded max-w-sm w-full text-center border-none shadow-2xl">
             <h2 class="serif text-3xl font-bold mb-4">Secured Access</h2>
@@ -29,195 +31,175 @@
         </div>
     </div>
 
+    <!-- Main Dashboard -->
     <div id="dashboard-content" class="max-w-7xl mx-auto opacity-0 transition-opacity duration-1000">
-        <!-- Dashboard Header -->
         <header class="flex flex-col md:flex-row justify-between items-end border-b-[6px] border-black pb-6 mb-12">
             <div>
                 <p class="text-sm font-bold tracking-[0.3em] text-gray-500 mb-2 uppercase">Company Command Center</p>
-                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.0</span></h1>
+                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.2</span></h1>
             </div>
             <div class="text-right mt-4 md:mt-0">
                 <p class="serif text-2xl italic font-bold" id="current-date"></p>
                 <div class="flex items-center justify-end gap-2 mt-1">
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span id="pulse-dot" class="w-2 h-2 bg-green-500 rounded-full"></span>
                     <p class="text-xs font-bold uppercase tracking-widest">Live Feed Active</p>
                 </div>
             </div>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
-            
-            <!-- Left Column: Activity Feed & Docs (8 cols) -->
             <div class="md:col-span-8 space-y-12">
-                
-                <!-- Section: Activity Feed -->
                 <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2 flex justify-between items-center">
                         Activity Feed
-                        <span class="text-sm font-sans uppercase tracking-widest text-gray-400">Real-time Squad Actions</span>
+                        <span class="text-sm font-sans uppercase tracking-widest text-gray-400">Real-time Actions</span>
                     </h2>
-                    <div class="space-y-6">
-                        <div class="feed-item">
-                            <p class="text-xs font-bold text-gray-400 mb-1">20:33 UTC | Echo (Lead)</p>
-                            <p class="serif text-xl leading-snug">Stabilized gateway configuration and restored squad permissions. Transitioning agents to overnight autonomous mode.</p>
-                        </div>
-                        <div class="feed-item">
-                            <p class="text-xs font-bold text-gray-400 mb-1">20:26 UTC | Friday (Builder)</p>
-                            <p class="serif text-xl leading-snug">Successfully restructured nextric.io repository. Moved public blog to /public and initiated secure /dashboard/ directory.</p>
-                        </div>
-                        <div class="feed-item">
-                            <p class="text-xs font-bold text-gray-400 mb-1">20:12 UTC | Fury (Scout)</p>
-                            <p class="serif text-xl leading-snug">Scanned top 20 subreddits for 'AI Agency' pain points. Identified high demand for automated newsletter-to-podcast workflows.</p>
-                        </div>
-                    </div>
+                    <div id="activity-feed" class="space-y-6"></div>
                 </section>
 
-                <!-- Section: Task Board -->
                 <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Task Board</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Inbox -->
                         <div class="space-y-4">
                             <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2">Inbox</h3>
-                            <div class="card p-4 rounded text-sm font-medium">Set up automated Twitter outreach for Friday's first MVP.</div>
-                            <div class="card p-4 rounded text-sm font-medium">Research token-gated access for premium dashboard features.</div>
+                            <div id="inbox-tasks" class="space-y-4"></div>
                         </div>
-                        <!-- In Progress -->
                         <div class="space-y-4">
                             <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2 text-blue-600">In Progress</h3>
-                            <div class="card p-4 rounded text-sm font-bold border-l-4 border-blue-600">
-                                Friday: Generating V2 Dashboard CSS & Layout.
-                            </div>
-                            <div class="card p-4 rounded text-sm font-bold border-l-4 border-blue-600">
-                                Fury: Validating ROI for 'Newsletter-to-Podcast' SaaS niche.
-                            </div>
+                            <div id="inprogress-tasks" class="space-y-4"></div>
                         </div>
-                        <!-- Done -->
                         <div class="space-y-4">
                             <h3 class="font-bold uppercase tracking-widest text-xs border-b border-gray-300 pb-2 text-green-600">Done</h3>
-                            <div class="card p-4 rounded text-sm text-gray-400 line-through">Establish Git repository and deploy to GitHub Pages.</div>
-                            <div class="card p-4 rounded text-sm text-gray-400 line-through">Configure squad roster and SOUL files.</div>
+                            <div id="done-tasks" class="space-y-4"></div>
                         </div>
                     </div>
                 </section>
             </div>
 
-            <!-- Right Column: Squad & Status (4 cols) -->
             <div class="md:col-span-4 space-y-12">
-                
-                <!-- Section: The Squad -->
+                <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Active Intelligence</h2>
+                    <div id="active-intelligence" class="space-y-4"></div>
+                </section>
                 <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">The Squad</h2>
-                    <div class="space-y-4">
-                        <!-- Echo Card -->
-                        <div class="card p-5 rounded">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-3xl">🌊</span>
-                                <span class="status-badge status-active">Online</span>
-                            </div>
-                            <h4 class="text-xl font-bold">Echo</h4>
-                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Executive Control / Lead</p>
-                            <p class="text-sm italic text-gray-600 leading-tight">"Coordinating squad deployments and ensuring system stability."</p>
-                        </div>
-                        <!-- Fury Card -->
-                        <div class="card p-5 rounded">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-3xl">🕵️</span>
-                                <span class="status-badge status-active">Active</span>
-                            </div>
-                            <h4 class="text-xl font-bold">Fury</h4>
-                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Market Research / Scout</p>
-                            <p class="text-sm italic text-gray-600 leading-tight">"Deep-scanning Reddit for untapped SaaS opportunities."</p>
-                        </div>
-                        <!-- Friday Card -->
-                        <div class="card p-5 rounded">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-3xl">🛠️</span>
-                                <span class="status-badge status-building">Coding</span>
-                            </div>
-                            <h4 class="text-xl font-bold">Friday</h4>
-                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Technical Build / Builder</p>
-                            <p class="text-sm italic text-gray-600 leading-tight">"Implementing live memory-syncing for Mission Control V2."</p>
-                        </div>
-                        <!-- Wanda Card -->
-                        <div class="card p-5 rounded">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-3xl">🔮</span>
-                                <span class="status-badge status-idle">Checking Odds</span>
-                            </div>
-                            <h4 class="text-xl font-bold">Wanda</h4>
-                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Crypto / Predictions Analyst</p>
-                            <p class="text-sm italic text-gray-600 leading-tight">"Monitoring Polymarket for undervalued alpha."</p>
-                        </div>
-                        <!-- Vision Card -->
-                        <div class="card p-5 rounded">
-                            <div class="flex justify-between items-start mb-3">
-                                <span class="text-3xl">📈</span>
-                                <span class="status-badge status-idle">Idle</span>
-                            </div>
-                            <h4 class="text-xl font-bold">Vision</h4>
-                            <p class="text-xs font-bold uppercase text-gray-500 tracking-tighter mb-2">Growth / Distribution</p>
-                            <p class="text-sm italic text-gray-600 leading-tight">"Awaiting first product launch to initiate growth hooks."</p>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Section: Deliverables -->
-                <section>
-                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Docs</h2>
-                    <div class="card p-6 bg-[#fffdfa] border-dashed border-2">
-                        <ul class="space-y-4 font-bold text-sm uppercase tracking-widest text-blue-600">
-                            <li><a href="#" class="hover:underline">📂 Market_Scout_Report_V1.pdf</a></li>
-                            <li><a href="#" class="hover:underline">📂 Tech_Stack_Decisions.md</a></li>
-                            <li><a href="#" class="hover:underline">📂 Lessons_Learned.log</a></li>
-                        </ul>
-                    </div>
+                    <div id="squad-list" class="space-y-4"></div>
                 </section>
             </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="mt-24 pt-8 border-t border-black text-center text-gray-400 font-bold uppercase tracking-[0.5em] text-xs pb-12">
-            AI AGENT SQUAD | Powered by Nextric & OpenClaw
-            <br>
-            <a href="/index.md" class="mt-4 inline-block underline tracking-widest">Public Site Entrance</a>
-        </footer>
     </div>
 
+    <!-- MONOLITHIC FALLBACK ENGINE -->
     <script>
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-        // Auto-login if key is stored
-        window.addEventListener('load', () => {
-            const storedKey = localStorage.getItem('squad_auth_key');
-            if (storedKey === 'ghp_WnjF') {
-                showDashboard();
+        // AUTH & BOOTSTRAP
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                dateElement.innerText = new Date().toLocaleDateString('en-US', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                });
             }
+            if (localStorage.getItem('squad_auth_key') === 'ghp_WnjF') showDashboard();
+            document.getElementById('squad-key').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAuth(); });
         });
 
-        function showDashboard() {
-            document.getElementById('auth-overlay').classList.add('hidden');
-            const content = document.getElementById('dashboard-content');
-            content.classList.remove('opacity-0');
-        }
-
         function checkAuth() {
-            const key = document.getElementById('squad-key').value;
-            if (key === 'ghp_WnjF') {
-                localStorage.setItem('squad_auth_key', key);
+            if (document.getElementById('squad-key').value === 'ghp_WnjF') {
+                localStorage.setItem('squad_auth_key', 'ghp_WnjF');
                 showDashboard();
             } else {
                 document.getElementById('auth-error').classList.remove('hidden');
-                document.getElementById('auth-error').textContent = "ACCESS DENIED: INCORRECT SQUAD KEY.";
             }
         }
 
-        // Allow 'Enter' key to trigger login
-        document.getElementById('squad-key').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkAuth();
+        function showDashboard() {
+            document.getElementById('auth-overlay').classList.add('hidden');
+            document.getElementById('dashboard-content').classList.remove('opacity-0');
+            startLiveSync();
+        }
+
+        // SYNC ENGINE
+        async function startLiveSync() {
+            loadAllData();
+            setInterval(loadAllData, 15000);
+        }
+
+        async function loadAllData() {
+            const pulse = document.getElementById('pulse-dot');
+            pulse.classList.add('pulse-active');
+            
+            try {
+                // 1. Load Feed
+                const feedRes = await fetch('feed.json?t=' + Date.now(), { cache: 'no-store' });
+                const feedData = await feedRes.json();
+                renderFeed(feedData);
+
+                // 2. Load Working.md
+                const workingRes = await fetch('../memory/WORKING.md?t=' + Date.now(), { cache: 'no-store' });
+                const workingText = await workingRes.text();
+                syncWorking(workingText);
+
+            } catch (err) { console.error('Sync Error:', err); }
+            
+            setTimeout(() => pulse.classList.remove('pulse-active'), 2000);
+        }
+
+        function renderFeed(data) {
+            document.getElementById('activity-feed').innerHTML = data.slice(0, 10).map(item => `
+                <div class="feed-item">
+                    <p class="text-xs font-bold text-gray-400 mb-1">${item.timestamp} | ${item.agent}</p>
+                    <p class="serif text-xl leading-snug">${item.content}</p>
+                </div>
+            `).join('');
+
+            const intel = data.filter(i => i.content.includes('OPTIMIZING') || i.content.includes('TECHNICAL')).slice(0, 3);
+            document.getElementById('active-intelligence').innerHTML = intel.map(i => `
+                <div class="card border-l-4 border-black mb-4">
+                    <p class="text-[10px] uppercase font-bold mb-1">${i.agent}</p>
+                    <p class="text-sm font-medium leading-relaxed">${i.content}</p>
+                </div>
+            `).join('') || '<p class="text-xs text-center text-gray-400">Monitoring...</p>';
+        }
+
+        function syncWorking(markdown) {
+            const parseSection = (tag) => {
+                const regex = new RegExp(`### ${tag}([\\s\\S]*?)(?=###|##|$)`, 'i');
+                const match = markdown.match(regex);
+                if (!match) return [];
+                return match[1].trim().split('\n')
+                    .filter(l => l.trim().startsWith('- ['))
+                    .map(l => l.replace(/- \[[x ]\] /i, '').trim());
+            };
+
+            const inject = (id, tasks, extraClass = "") => {
+                document.getElementById(id).innerHTML = tasks.map(t => `
+                    <div class="card text-sm font-medium mb-4 ${extraClass}">${t}</div>
+                `).join('') || '<p class="text-xs italic text-gray-400">None</p>';
+            };
+
+            inject('inbox-tasks', parseSection('Inbox'));
+            inject('inprogress-tasks', parseSection('In Progress'), 'border-l-4 border-blue-600 font-bold');
+            inject('done-tasks', parseSection('Done'), 'text-gray-400 line-through');
+
+            const rosterMatch = markdown.match(/## Roster([\s\S]*?)(?=##|$)/);
+            if (rosterMatch) {
+                document.getElementById('squad-list').innerHTML = rosterMatch[1].trim().split('\n').map(line => {
+                    const name = line.match(/\*\*([^*]+)\*\*/)?.[1];
+                    if (!name) return '';
+                    const active = line.includes('[ACTIVE]');
+                    const emoji = name === 'Echo' ? '🌊' : (name === 'Friday' ? '🛠️' : (name === 'Wanda' ? '🔮' : (name === 'Fury' ? '🦅' : '👁️')));
+                    return `
+                        <div class="card mb-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-3xl">${emoji}</span>
+                                <span class="status-badge ${active ? 'status-active' : 'status-idle'}">${active ? 'Active' : 'Idle'}</span>
+                            </div>
+                            <h4 class="text-xl font-bold">${name}</h4>
+                        </div>
+                    `;
+                }).join('');
             }
-        });
+        }
     </script>
 </body>
 </html>

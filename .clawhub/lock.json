@@ -40,6 +40,42 @@
     "weather": {
       "version": "1.0.0",
       "installedAt": 1770318995368
+    },
+    "deep-research": {
+      "version": "1.0.1",
+      "installedAt": 1770325641962
+    },
+    "evolver": {
+      "version": "1.3.1",
+      "installedAt": 1770325645385
+    },
+    "proactive-agent": {
+      "version": "3.1.0",
+      "installedAt": 1770366037606
+    },
+    "dwlf": {
+      "version": "1.0.0",
+      "installedAt": 1770373204913
+    },
+    "technical-analyst": {
+      "version": "0.1.0",
+      "installedAt": 1770373206214
+    },
+    "trading-research": {
+      "version": "1.0.0",
+      "installedAt": 1770373208582
+    },
+    "agent-browser-clawdbot": {
+      "version": "0.1.0",
+      "installedAt": 1770373209608
+    },
+    "btc15-autonomous-market": {
+      "version": "1.1.1",
+      "installedAt": 1770373257950
+    },
+    "autonomous-agent": {
+      "version": "1.1.0",
+      "installedAt": 1770373262304
     }
   }
 }

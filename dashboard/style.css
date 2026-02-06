@@ -1,0 +1,9 @@
+body { font-family: 'Inter', sans-serif; background-color: #f3f2ee; color: #1a1a1a; }
+.serif { font-family: 'Crimson Pro', serif; }
+.card { background-color: #fff; border: 1px solid #e5e1da; border-bottom: 3px solid #dcd7ce; transition: transform 0.2s; }
+.card:hover { transform: translateY(-2px); }
+.status-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em; }
+.status-active { background-color: #059669; color: #fff; }
+.status-idle { background-color: #9ca3af; color: #fff; }
+.status-building { background-color: #2563eb; color: #fff; }
+.feed-item { border-left: 2px solid #000; padding-left: 1rem; margin-bottom: 1.5rem; }
