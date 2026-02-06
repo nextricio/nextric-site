@@ -82,6 +82,10 @@
                     <div id="active-intelligence" class="space-y-4"></div>
                 </section>
                 <section>
+                    <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Squad Comms</h2>
+                    <div id="squad-comms" class="space-y-4"></div>
+                </section>
+                <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">The Squad</h2>
                     <div id="squad-list" class="space-y-4"></div>
                 </section>
@@ -128,6 +132,16 @@
             const pulse = document.getElementById('pulse-dot');
             pulse.classList.add('pulse-active');
             
+            // Set Dashboard Time to UTC+1
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                const utcPlus1 = new Date(now.getTime() + (60 * 60 * 1000));
+                dateElement.innerText = utcPlus1.toLocaleDateString('en-US', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                }) + " (UTC+1)";
+            }
+
             try {
                 // 1. Load Feed
                 const feedRes = await fetch('feed.json?t=' + Date.now(), { cache: 'no-store' });
@@ -138,6 +152,11 @@
                 const workingRes = await fetch('../memory/WORKING.md?t=' + Date.now(), { cache: 'no-store' });
                 const workingText = await workingRes.text();
                 syncWorking(workingText);
+
+                // 3. Load Comms
+                const commsRes = await fetch('comms.json?t=' + Date.now(), { cache: 'no-store' });
+                const commsData = await commsRes.json();
+                renderComms(commsData);
 
             } catch (err) { console.error('Sync Error:', err); }
             
@@ -159,6 +178,21 @@
                     <p class="text-sm font-medium leading-relaxed">${i.content}</p>
                 </div>
             `).join('') || '<p class="text-xs text-center text-gray-400">Monitoring...</p>';
+        }
+
+        function renderComms(data) {
+            document.getElementById('squad-comms').innerHTML = data.slice(-5).reverse().map(item => `
+                <div class="card mb-3 relative overflow-hidden">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">${item.from} → ${item.to}</span>
+                        <span class="text-[9px] text-gray-400">${new Date(item.timestamp).toLocaleTimeString()}</span>
+                    </div>
+                    <p class="text-sm font-medium italic">"${item.message}"</p>
+                    <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none p-1">
+                        <span class="text-xs">💬</span>
+                    </div>
+                </div>
+            `).join('') || '<p class="text-xs text-center text-gray-400">No recent comms.</p>';
         }
 
         function syncWorking(markdown) {

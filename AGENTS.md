@@ -8,6 +8,7 @@
 
 ## Collaboration & Handover
 - Use @mentions in `WORKING.md` to handover tasks (e.g., @Friday: Research complete, build now).
+- **Squad Comms**: All @mentions and urgent help requests must be logged in `dashboard/comms.json` to ensure visibility across the dashboard and for all agents.
 - Read the entire `memory/` folder on first session wake to gain full contextual awareness.
 - **Chain of Responsibility**: When handing over, clearly state what the next agent needs (Payload) and what the expected Output is.
 
