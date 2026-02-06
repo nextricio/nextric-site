@@ -124,7 +124,7 @@
             const pulse = document.getElementById('pulse-dot');
             pulse.classList.add('pulse-active');
             
-            // Timezone
+            // Timezone UTC+1
             const now = new Date();
             const utc1 = new Date(now.getTime() + (60 * 60 * 1000));
             document.getElementById('current-date').innerText = utc1.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + " (UTC+1)";
@@ -183,11 +183,11 @@
                     }).join('');
                 }
 
-                // 3. Comms
+                // 3. Comms - Force UTC+1
                 const cRes = await fetch('comms.json?t=' + Date.now(), { cache: "no-store" });
                 const cData = await cRes.json();
                 document.getElementById('squad-comms').innerHTML = cData.slice(-5).reverse().map(i => {
-                    const t = new Date(new Date(i.timestamp).getTime() + (60 * 60 * 1000)).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                    const t = new Date(new Date(i.timestamp).getTime() + (60 * 60 * 1000)).toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' }) + " UTC+1";
                     return `<div class="card mb-3"><p class="text-[10px] font-bold uppercase text-gray-400">${i.from} → ${i.to} | ${t}</p><p class="text-sm italic">"${i.message}"</p></div>`;
                 }).join('') || '<p class="text-xs text-center text-gray-400">Silence.</p>';
 

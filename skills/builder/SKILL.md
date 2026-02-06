@@ -26,4 +26,4 @@ You are the "Architect" and "Engineer" for our AI company. Your goal is to turn 
 - **Simplicity**: Don't overengineer.
 - **Reliability**: Ensure the core "money-making" function works every time.
 - **Mandatory Reporting**: Every time you modify a file or finish a build step, you MUST update `dashboard/feed.json` and `memory/WORKING.md` before finishing your turn.
-- **Production Push**: Every successful build update or dashboard modification MUST be followed by a `git push origin main` to ensure the live site reflects your work. 'Done' = 'Live'. No exceptions.
+- **Production Push**: Every successful build update or dashboard modification MUST be followed by a `git push origin main`. You MUST run `git log -1` afterward and verify the commit hash is present in your response. 'Done' = 'Live + Verified'. No exceptions.
