@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nextric Mission Control | V2.4</title>
+    <title>Nextric Mission Control | V2.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -34,7 +34,7 @@
         <header class="flex flex-col md:flex-row justify-between items-end border-b-[6px] border-black pb-6 mb-12">
             <div>
                 <p class="text-sm font-bold tracking-[0.3em] text-gray-500 mb-2 uppercase">Company Command Center</p>
-                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.4</span></h1>
+                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.5</span></h1>
             </div>
             <div class="text-right mt-4 md:mt-0">
                 <p class="serif text-2xl italic font-bold" id="current-date"></p>
@@ -113,27 +113,42 @@
             setInterval(loadAll, 15000);
         }
 
-        function getUTC1(date = new Date()) {
-            return new Date(date.getTime() + (date.getTimezoneOffset() * 60000) + 3600000);
+        // ABSOLUTE UTC+1 Calculation Logic
+        function getUTC1Time(dateObj = new Date()) {
+            // Get raw UTC components
+            const utcHours = dateObj.getUTCHours();
+            const utcMinutes = dateObj.getUTCMinutes();
+            
+            // Add 1 hour for UTC+1
+            let displayHours = utcHours + 1;
+            if (displayHours >= 24) displayHours -= 24;
+            
+            const h = displayHours.toString().padStart(2, '0');
+            const m = utcMinutes.toString().padStart(2, '0');
+            return `${h}:${m}`;
         }
 
         async function loadAll() {
             const pulse = document.getElementById('pulse-dot');
             pulse.classList.add('pulse-active');
             
-            const utc1 = getUTC1();
-            document.getElementById('current-date').innerText = utc1.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + " " + utc1.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + " (UTC+1)";
+            // Current Time Header
+            const now = new Date();
+            const timeStr = getUTC1Time(now);
+            const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('current-date').innerText = `${dateStr} ${timeStr} (UTC+1)`;
 
             try {
                 // 1. Feed
                 const fRes = await fetch('feed.json?t=' + Date.now(), { cache: "no-store" });
                 const fData = await fRes.json();
-                document.getElementById('activity-feed').innerHTML = fData.slice(0, 10).map(i => `
+                document.getElementById('activity-feed').innerHTML = fData.slice(0, 10).map(i => {
+                    return `
                     <div class="feed-item">
                         <p class="text-xs font-bold text-gray-400 mb-1">${i.timestamp}</p>
                         <p class="serif text-xl leading-snug">${i.content}</p>
-                    </div>
-                `).join('');
+                    </div>`;
+                }).join('');
 
                 const intel = fData.filter(i => i.content.includes('OPTIMIZING') || i.content.includes('TECHNICAL')).slice(0, 2);
                 document.getElementById('active-intelligence').innerHTML = intel.map(i => `
@@ -178,8 +193,8 @@
                 const cRes = await fetch('comms.json?t=' + Date.now(), { cache: "no-store" });
                 const cData = await cRes.json();
                 document.getElementById('squad-comms').innerHTML = cData.slice(-5).reverse().map(i => {
-                    const t = getUTC1(new Date(i.timestamp)).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-                    return `<div class="card mb-3"><p class="text-[10px] font-bold uppercase text-gray-400">${i.from} → ${i.to} | ${t} UTC+1</p><p class="text-sm italic">"${i.message}"</p></div>`;
+                    const cTime = getUTC1Time(new Date(i.timestamp));
+                    return `<div class="card mb-3"><p class="text-[10px] font-bold uppercase text-gray-400">${i.from} → ${i.to} | ${cTime} UTC+1</p><p class="text-sm italic">"${i.message}"</p></div>`;
                 }).join('') || '<p class="text-xs text-center text-gray-400">Silence.</p>';
 
             } catch (e) { console.error(e); }

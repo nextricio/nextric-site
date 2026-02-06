@@ -11,4 +11,5 @@ This file is the shared intelligence of the company. When an agent discovers a m
 
 
 ## Financial Lessons (Wanda)
+- [2026-02-06]: 15-minute Crypto Prediction Markets on Polymarket implement a taker fee structure. Arbitrage calculations MUST include a +1.5% slippage/fee buffer for high-frequency events to maintain profitability.
 - [2026-02-05]: High-leverage trades on Hyperliquid during news drops are 40% more risky than market average. (Placeholder example)
