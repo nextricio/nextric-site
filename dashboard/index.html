@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nextric Mission Control | V2.3</title>
+    <title>Nextric Mission Control | V2.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -20,7 +20,6 @@
     </style>
 </head>
 <body class="p-4 md:p-12">
-    <!-- Auth Overlay -->
     <div id="auth-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f3f2ee]">
         <div class="card p-8 rounded max-w-sm w-full text-center border-none shadow-2xl">
             <h2 class="serif text-3xl font-bold mb-4">Secured Access</h2>
@@ -31,12 +30,11 @@
         </div>
     </div>
 
-    <!-- Main Dashboard -->
     <div id="dashboard-content" class="max-w-7xl mx-auto opacity-0 transition-opacity duration-1000">
         <header class="flex flex-col md:flex-row justify-between items-end border-b-[6px] border-black pb-6 mb-12">
             <div>
                 <p class="text-sm font-bold tracking-[0.3em] text-gray-500 mb-2 uppercase">Company Command Center</p>
-                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.3</span></h1>
+                <h1 class="serif text-7xl font-bold tracking-tighter">MISSION CONTROL <span class="text-3xl align-top">v2.4</span></h1>
             </div>
             <div class="text-right mt-4 md:mt-0">
                 <p class="serif text-2xl italic font-bold" id="current-date"></p>
@@ -56,7 +54,6 @@
                     </h2>
                     <div id="activity-feed" class="space-y-6"></div>
                 </section>
-
                 <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Task Board</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -75,7 +72,6 @@
                     </div>
                 </section>
             </div>
-
             <div class="md:col-span-4 space-y-12">
                 <section>
                     <h2 class="serif text-4xl font-bold mb-8 border-b-2 border-black pb-2">Active Intelligence</h2>
@@ -93,18 +89,15 @@
         </div>
     </div>
 
-    <!-- RECOVERY SYNC ENGINE -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const storedKey = localStorage.getItem('squad_auth_key');
-            if (storedKey === 'ghp_WnjF') showDashboard();
+            if (localStorage.getItem('squad_auth_key') === 'ghp_WnjF') showDashboard();
             document.getElementById('squad-key').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAuth(); });
         });
 
         function checkAuth() {
-            const k = document.getElementById('squad-key').value;
-            if (k === 'ghp_WnjF') {
-                localStorage.setItem('squad_auth_key', k);
+            if (document.getElementById('squad-key').value === 'ghp_WnjF') {
+                localStorage.setItem('squad_auth_key', 'ghp_WnjF');
                 showDashboard();
             } else { document.getElementById('auth-error').classList.remove('hidden'); }
         }
@@ -120,14 +113,16 @@
             setInterval(loadAll, 15000);
         }
 
+        function getUTC1(date = new Date()) {
+            return new Date(date.getTime() + (date.getTimezoneOffset() * 60000) + 3600000);
+        }
+
         async function loadAll() {
             const pulse = document.getElementById('pulse-dot');
             pulse.classList.add('pulse-active');
             
-            // Timezone UTC+1
-            const now = new Date();
-            const utc1 = new Date(now.getTime() + (60 * 60 * 1000));
-            document.getElementById('current-date').innerText = utc1.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + " (UTC+1)";
+            const utc1 = getUTC1();
+            document.getElementById('current-date').innerText = utc1.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + " " + utc1.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + " (UTC+1)";
 
             try {
                 // 1. Feed
@@ -140,7 +135,6 @@
                     </div>
                 `).join('');
 
-                // Intelligence Card
                 const intel = fData.filter(i => i.content.includes('OPTIMIZING') || i.content.includes('TECHNICAL')).slice(0, 2);
                 document.getElementById('active-intelligence').innerHTML = intel.map(i => `
                     <div class="card border-l-4 border-black mb-4">
@@ -149,20 +143,17 @@
                     </div>
                 `).join('') || '<p class="text-xs text-center text-gray-400 italic">No active optimizations.</p>';
 
-                // 2. Working.md Parsing
+                // 2. Working.md
                 const wRes = await fetch('../memory/WORKING.md?t=' + Date.now(), { cache: "no-store" });
                 const wMd = await wRes.text();
-                
                 const parse = (tag) => {
                     const match = wMd.match(new RegExp('### ' + tag + '([\\s\\S]*?)(?=###|##|$)', 'i'));
                     if (!match) return [];
                     return match[1].trim().split('\n').filter(l => l.trim().startsWith('-')).map(l => l.replace(/- \[[x ]\] /i, '').replace(/^- /i, '').trim());
                 };
-
                 const inj = (id, tasks, style) => {
                     document.getElementById(id).innerHTML = tasks.map(t => `<div class="card text-sm font-medium mb-4 ${style}">${t}</div>`).join('') || '<p class="text-xs text-gray-400">Empty</p>';
                 };
-
                 inj('inbox-tasks', parse('Inbox'), '');
                 inj('inprogress-tasks', parse('In Progress'), 'border-l-4 border-blue-600 font-bold');
                 inj('done-tasks', parse('Done'), 'text-gray-400 line-through');
@@ -183,12 +174,12 @@
                     }).join('');
                 }
 
-                // 3. Comms - Force UTC+1
+                // 3. Comms
                 const cRes = await fetch('comms.json?t=' + Date.now(), { cache: "no-store" });
                 const cData = await cRes.json();
                 document.getElementById('squad-comms').innerHTML = cData.slice(-5).reverse().map(i => {
-                    const t = new Date(new Date(i.timestamp).getTime() + (60 * 60 * 1000)).toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' }) + " UTC+1";
-                    return `<div class="card mb-3"><p class="text-[10px] font-bold uppercase text-gray-400">${i.from} → ${i.to} | ${t}</p><p class="text-sm italic">"${i.message}"</p></div>`;
+                    const t = getUTC1(new Date(i.timestamp)).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+                    return `<div class="card mb-3"><p class="text-[10px] font-bold uppercase text-gray-400">${i.from} → ${i.to} | ${t} UTC+1</p><p class="text-sm italic">"${i.message}"</p></div>`;
                 }).join('') || '<p class="text-xs text-center text-gray-400">Silence.</p>';
 
             } catch (e) { console.error(e); }
