@@ -17,14 +17,13 @@ Build the "Mission Control" team and dashboard to launch our AI SaaS company.
 
 ## Task Board
 ### Inbox
-- [ ] @Friday: Implement real-time DWLF (Deep Web Liquidity Finder) signal listener.
 - [ ] @Vision: Begin SEO strategy for 'Nextric-Trade-Bot' landing page.
 - [ ] @Fury: Draft initial Reddit SaaS report based on niche findings.
 
 ### In Progress
-- [ ] @Friday: Hardening Trade-Bot with DWLF integration
-- [ ] Wanda: Paper-trading BTC targets
-- [ ] Fury: Refining Reddit SaaS report
+- [ ] @Friday: Hardening Trade-Bot with real-time DWLF signal integration.
+- [ ] Wanda: Paper-trading BTC targets.
+- [ ] Fury: Refining Reddit SaaS report.
 
 ### Done
 - [x] @Friday: Research technical feasibility of a Python-based trading bot for Polymarket/Hyperliquid. Focus on SDKs like 'py-polymarket'. [RECEIPT: 2026-02-06]
