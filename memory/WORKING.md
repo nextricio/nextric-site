@@ -17,16 +17,20 @@ Build the "Mission Control" team and dashboard to launch our AI SaaS company.
 
 ## Task Board
 ### Inbox
-- [ ] @Friday: Research technical feasibility of a Python-based trading bot for Polymarket/Hyperliquid. Focus on SDKs like 'py-polymarket'.
-- [ ] @Wanda: Document 3 proven strategies (Arbitrage, Whale-following, News-event trading) for bot automation.
-- [ ] @Friday: Begin boilerplate for a 'Nextric-Trade-Bot' using Wanda's strategy specs.
+- [ ] @Friday: Implement real-time DWLF (Deep Web Liquidity Finder) signal listener.
+- [ ] @Vision: Begin SEO strategy for 'Nextric-Trade-Bot' landing page.
+- [ ] @Fury: Draft initial Reddit SaaS report based on niche findings.
 
 ### In Progress
-- [ ] @Friday: Research technical feasibility of a Python-based trading bot for Polymarket/Hyperliquid. Focus on SDKs like 'py-polymarket'.
-- [ ] Fury: Locate top 3 underserved SaaS niches on Reddit.
-- [ ] Wanda: Identify current alpha for morning report.
+- [ ] @Friday: Hardening Trade-Bot with DWLF integration
+- [ ] Wanda: Paper-trading BTC targets
+- [ ] Fury: Refining Reddit SaaS report
 
 ### Done
+- [x] @Friday: Research technical feasibility of a Python-based trading bot for Polymarket/Hyperliquid. Focus on SDKs like 'py-polymarket'. [RECEIPT: 2026-02-06]
+- [x] @Wanda: Document 3 proven strategies (Arbitrage, Whale-following, News-event trading) for bot automation. [RECEIPT: 2026-02-06]
+- [x] @Friday: Begin boilerplate for a 'Nextric-Trade-Bot' using Wanda's strategy specs. [RECEIPT: 2026-02-06]
+- [x] Friday: Squad Comms Implementation and Refinement. [RECEIPT: 2026-02-06]
 - [x] @Friday: Decoupled Dashboard logic. Moved JavaScript to `app.js` and custom CSS to `style.css`. Simplified `index.html` to a clean shell. Preserved cache-busting for live feed. [RECEIPT: 2026-02-06 10:45 UTC]
 - [x] @Friday: Updated Mission Control V2 Dashboard to use `cache: "no-store"` for the feed and implemented a 30s background refresh interval. Verified with a "UI REFRESH ACTIVE" entry in `feed.json`. [RECEIPT: 2026-02-06 10:18 UTC]
 - [x] @Wanda: Documented 3 proven strategies (Arbitrage, Whale-following, News-event trading) in `trade-bot/strategies.md`. [RECEIPT: 2026-02-06 09:50 UTC]

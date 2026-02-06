@@ -200,18 +200,21 @@
 
         function syncWorking(markdown) {
             const parseSection = (tag) => {
-                const regex = new RegExp(`### ${tag}([\\s\\S]*?)(?=###|##|$)`, 'i');
+                const regex = new RegExp(`### ${tag}\\s*([\\s\\S]*?)(?=###|##|$)`, 'i');
                 const match = markdown.match(regex);
                 if (!match) return [];
                 return match[1].trim().split('\n')
-                    .filter(l => l.trim().startsWith('- ['))
-                    .map(l => l.replace(/- \[[x ]\] /i, '').trim());
+                    .filter(l => l.trim().startsWith('-'))
+                    .map(l => l.replace(/- \[[x ]\] /i, '').replace(/^- /i, '').trim());
             };
 
             const inject = (id, tasks, extraClass = "") => {
-                document.getElementById(id).innerHTML = tasks.map(t => `
-                    <div class="card text-sm font-medium mb-4 ${extraClass}">${t}</div>
-                `).join('') || '<p class="text-xs italic text-gray-400">None</p>';
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerHTML = tasks.map(t => `
+                        <div class="card text-sm font-medium mb-4 ${extraClass}">${t}</div>
+                    `).join('') || '<p class="text-xs italic text-gray-400">None</p>';
+                }
             };
 
             inject('inbox-tasks', parseSection('Inbox'));
